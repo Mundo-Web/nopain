@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from "react";
-import ReactModal from "react-modal";
-
 import Tippy from "@tippyjs/react";
 import HtmlContent from "../../Utils/HtmlContent";
 import GeneralRest from "../../actions/GeneralRest";
 import { X } from "lucide-react";
 import { useTranslation } from "../../hooks/useTranslation";
-
-ReactModal.setAppElement("#app");
+import CookieBanner from "./CookieBanner";
 
 const Footer = ({ terms, footerLinks = [] }) => {
     const { t } = useTranslation();
-    const [modalOpen, setModalOpen] = useState(false);
-    const openModal = (index) => setModalOpen(index);
-    const closeModal = () => setModalOpen(false);
     const generalRest = new GeneralRest();
     const links = {};
     /* footerLinks.forEach((fl) => {
@@ -206,7 +200,7 @@ const Footer = ({ terms, footerLinks = [] }) => {
                                 </p>
                                 <a
                                     className="text-[14px] cursor-pointer"
-                                    onClick={() => openModal(0)}
+                                    href="/policies/privacy_policy"
                                 >
                                     {t(
                                         "public.footer.privacity",
@@ -214,7 +208,7 @@ const Footer = ({ terms, footerLinks = [] }) => {
                                     )}
                                 </a>
                                 <a
-                                    onClick={() => openModal(1)}
+                                    href="/policies/terms_conditions"
                                     className="text-[14px] cursor-pointer"
                                 >
                                     {t(
@@ -222,15 +216,24 @@ const Footer = ({ terms, footerLinks = [] }) => {
                                         "Términos y Condiciones"
                                     )}
                                 </a>
-                                <p
-                                    onClick={() => openModal(2)}
+                                <a
+                                    href="/policies/exchange_policy"
                                     className="text-[14px] cursor-pointer"
                                 >
                                     {t(
                                         "public.footer.change",
                                         "Políticas de cambio"
                                     )}
-                                </p>
+                                </a>
+                                <a
+                                    href="/policies/cookies_policy"
+                                    className="text-[14px] cursor-pointer"
+                                >
+                                    {t(
+                                        "public.footer.cookies",
+                                        "Políticas de cookies"
+                                    )}
+                                </a>
                                 <a
                                     href="/libro-de-reclamaciones"
                                     target="_blank"
@@ -323,33 +326,8 @@ const Footer = ({ terms, footerLinks = [] }) => {
                         </p>
                     </div>
                 </div>
-                {/* Modal para Términos y Condiciones */}
-                {Object.keys(policyItems).map((key, index) => {
-                    const title = policyItems[key];
-                    const content =
-                        generalsData.find((x) => x.correlative == key)
-                            ?.description ?? "";
-                    return (
-                        <ReactModal
-                            key={index}
-                            isOpen={modalOpen === index}
-                            onRequestClose={closeModal}
-                            contentLabel={title}
-                            className="fixed top-[5%] left-1/2 -translate-x-1/2 bg-white p-6 rounded-3xl shadow-lg w-[95%] max-w-4xl max-h-[90vh] mb-10 overflow-y-auto scrollbar-hide"
-                            overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50 overflow-auto  scrollbar-hide "
-                        >
-                            <button
-                                onClick={closeModal}
-                                className="float-right  text-red-500 hover:text-red-700 transition-all duration-300 "
-                            >
-                                <X width="2rem" strokeWidth="4px" />
-                            </button>
-                            <h2 className="text-2xl font-bold mb-4">{title}</h2>
-                            <HtmlContent className="prose" html={content} />
-                        </ReactModal>
-                    );
-                })}
             </footer>
+            <CookieBanner />
         </>
     );
 };

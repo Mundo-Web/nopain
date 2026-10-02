@@ -47,6 +47,9 @@ const Generals = ({ generals }) => {
         exchangePolicy:
             generals.find((x) => x.correlative == "exchange_policy")
                 ?.description ?? "",
+        cookiesPolicy:
+            generals.find((x) => x.correlative == "cookies_policy")
+                ?.description ?? "",
         seoTitle:
             generals.find((x) => x.correlative == "seo_title")?.description ??
             "",
@@ -148,6 +151,11 @@ const Generals = ({ generals }) => {
                     correlative: "exchange_policy",
                     name: "Política de cambio",
                     description: formData.exchangePolicy,
+                },
+                {
+                    correlative: "cookies_policy",
+                    name: "Política de cookies",
+                    description: formData.cookiesPolicy,
                 },
                 {
                     correlative: "seo_title",
@@ -469,6 +477,18 @@ const Generals = ({ generals }) => {
                                     setFormData({
                                         ...formData,
                                         exchangePolicy: value,
+                                    })
+                                }
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <QuillFormGroup
+                                label="Políticas de cookies"
+                                value={formData.cookiesPolicy}
+                                onChange={(value) =>
+                                    setFormData({
+                                        ...formData,
+                                        cookiesPolicy: value,
                                     })
                                 }
                             />

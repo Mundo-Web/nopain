@@ -103,7 +103,7 @@ export default function TratamientoSection({
                     {services.map((service, index) => (
                         <SwiperSlide key={index}>
                             <motion.a
-                                href={`/services?slug=${service?.slug}`}
+                                href={`/services/${service?.slug}`}
                                 className="flex gap-4 my-6 w-[295px] h-[430px] relative"
                                 whileHover="hover"
                                 variants={cardHover}
@@ -148,7 +148,7 @@ export default function TratamientoSection({
                     {/* Primer bloque: 2 imágenes grandes */}
                     {services.slice(0, 2).map((service, index) => (
                         <motion.a
-                            href={`/services?slug=${service?.slug}`}
+                            href={`/services/${service?.slug}`}
                             key={`large-${index}`}
                             className="relative h-[410px] overflow-hidden rounded-3xl group"
                             whileHover="hover"
@@ -188,7 +188,7 @@ export default function TratamientoSection({
                         <div className="col-span-2 flex flex-col gap-6 h-full">
                             {services.slice(2, 4).map((service, index) => (
                                 <motion.a
-                                    href={`/services?slug=${service?.slug}`}
+                                    href={`/services/${service?.slug}`}
                                     key={`vertical-${index}`}
                                     className="relative h-[195px] overflow-hidden rounded-3xl group"
                                     whileHover="hover"
@@ -234,7 +234,7 @@ export default function TratamientoSection({
                     {services.length >= 5 && (
                         <div className="col-span-4 flex gap-6 mt-6">
                             <motion.a
-                                href={`/services?slug=${services[4]?.slug}`}
+                                href={`/services/${services[4]?.slug}`}
                                 className="w-8/12 relative h-[300px] overflow-hidden rounded-3xl group"
                                 whileHover="hover"
                                 variants={cardHover}

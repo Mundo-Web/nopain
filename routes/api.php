@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 // Admin
 use App\Http\Controllers\Admin\AboutusController as AdminAboutusController;
 use App\Http\Controllers\Admin\IndicatorController as AdminIndicatorController;
+use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Admin\MessageController as AdminMessageController;
 use App\Http\Controllers\Admin\AppointmentController as AdminAppointmentController;
 use App\Http\Controllers\Admin\SliderController as AdminSliderController;
@@ -362,6 +363,9 @@ Route::middleware('auth')->group(function () {
 
         Route::patch('/account/email', [AdminAccountController::class, 'email']);
         Route::patch('/account/password', [AdminAccountController::class, 'password']);
+
+        Route::get('/dashboard/analytics', [AdminHomeController::class, 'analytics']);
+        Route::post('/dashboard/analytics', [AdminHomeController::class, 'analytics']);
 
         /*NO PAIN LINKS */
 

@@ -67,6 +67,7 @@ use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TestResultController;
 use App\Http\Controllers\ThankController;
+use App\Http\Controllers\PolicyController;
 use Illuminate\Http\Request;
 
 /*
@@ -94,7 +95,7 @@ Route::get('/', [HomeController::class, 'reactView'])->name('Home.jsx');
 Route::get('/about', [AboutController::class, 'reactView'])->name('FisioTerapiaPage.jsx');
 Route::get('/contact', [ContactController::class, 'reactView'])->name('Contacto.jsx');
 Route::get('/offices', [FacilityController::class, 'reactView'])->name('InstalacionesPage.jsx');
-Route::get('/services', [ServiceController::class, 'reactView'])->name('ServiciosPage.jsx');
+Route::get('/services/{slug?}', [ServiceController::class, 'reactView'])->name('ServiciosPage.jsx');
 Route::get('/catalog', [CatalogController::class, 'reactView'])->name('CatalogProducts.jsx');
 Route::get('/instructions', [InstructionController::class, 'reactView'])->name('Instructions.jsx');
 Route::get('/quiz', [CatalogController::class, 'reactView'])->name('Quiz.jsx');
@@ -110,6 +111,7 @@ Route::get('/blog', [BlogController::class, 'reactView'])->name('Blog.jsx');
 Route::get('/blog/{slug}', [ArticleController::class, 'reactView'])->name('BlogArticle.jsx');
 Route::get('/contacto', [ContactController::class, 'reactView'])->name('Contact.jsx');
 Route::get('/libro-de-reclamaciones', [ComplaintController::class, 'reactView'])->name('LibroDeReclamaciones.jsx');
+Route::get('/policies/{policy}', [PolicyController::class, 'reactView'])->name('Policies.jsx');
 // Vistas maquetadas finalizadas
 Route::get('/checkout', [CheckoutController::class, 'reactView'])->name('Checkout.jsx');
 Route::get('/formula/{formula}', [FormulaController::class, 'reactView'])->name('Formula.jsx');

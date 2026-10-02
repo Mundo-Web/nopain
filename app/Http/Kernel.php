@@ -38,6 +38,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
             \App\Http\Middleware\ApplyLanguage::class,
+            \App\Http\Middleware\TrackPageVisits::class,
         ],
 
         'guest' => [

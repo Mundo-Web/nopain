@@ -9,8 +9,16 @@ const itemsRest = new ItemsRest();
 export const CarritoProvider = ({ children }) => {
     const [carrito, setCarrito] = useState(() => {
         const data = localStorage.getItem("carrito");
-
-        return data ? JSON.parse(data) : [];
+        if (data) {
+            try {
+                return JSON.parse(data);
+            } catch (error) {
+                console.warn("Invalid data in localStorage for carrito, resetting to empty array.", error);
+                localStorage.removeItem("carrito");
+                return [];
+            }
+        }
+        return [];
     });
     //  console.log("data", carrito);
 

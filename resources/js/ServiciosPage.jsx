@@ -17,7 +17,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination } from "swiper/modules";
 
-const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialities}) => {
+const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage, specialities, currentSlug }) => {
     const landingHero = landing?.find(
         (item) => item.correlative === "page_services_hero"
     );
@@ -27,8 +27,25 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialit
     );
 
     console.log(specialities)
+    const [selectedServiceIndex, setSelectedServiceIndex] = useState(() => {
+        if (!services || services.length === 0) return 0;
+        
+        // Obtener slug desde prop, pathname o query param
+        const pathParts = window.location.pathname.split("/").filter(Boolean);
+        const servicesIdx = pathParts.indexOf("services");
+        const slugFromPath = servicesIdx !== -1 && pathParts[servicesIdx + 1] ? decodeURIComponent(pathParts[servicesIdx + 1]) : null;
+        const urlParams = new URLSearchParams(window.location.search);
+        const target = currentSlug || slugFromPath || urlParams.get("slug");
+
+        if (target) {
+            const found = services.findIndex((s) => s.slug === target);
+            if (found !== -1) return found;
+        }
+        return 0;
+    });
+
+    const [activeSpecialtyIndex, setActiveSpecialtyIndex] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(0);
     const [showServicesMenu, setShowServicesMenu] = useState(false);
     const titleRef = useRef(null);
 
@@ -102,24 +119,74 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialit
         ));
     };
 
-    // Obtener el slug de la URL
+    // Sincronizar el servicio activo cuando cambia services o currentSlug
     useEffect(() => {
-        const getQueryParam = (param) => {
+        if (!services || services.length === 0) return;
+
+        const pathParts = window.location.pathname.split("/").filter(Boolean);
+        const servicesIdx = pathParts.indexOf("services");
+        const slugFromPath = servicesIdx !== -1 && pathParts[servicesIdx + 1] ? decodeURIComponent(pathParts[servicesIdx + 1]) : null;
+        const urlParams = new URLSearchParams(window.location.search);
+        const target = currentSlug || slugFromPath || urlParams.get("slug");
+
+        if (target) {
+            const foundIndex = services.findIndex((s) => s.slug === target);
+            if (foundIndex !== -1) {
+                setSelectedServiceIndex(foundIndex);
+                const expectedPath = `/services/${services[foundIndex].slug}`;
+                if (window.location.pathname !== expectedPath) {
+                    window.history.replaceState({ slug: services[foundIndex].slug }, "", expectedPath);
+                }
+                return;
+            }
+        }
+
+        // Si no hay slug en la URL o no coincide, poner el primero y reflejar en la URL
+        const first = services[0];
+        if (first?.slug) {
+            const defaultPath = `/services/${first.slug}`;
+            if (window.location.pathname !== defaultPath) {
+                window.history.replaceState({ slug: first.slug }, "", defaultPath);
+            }
+        }
+    }, [services, currentSlug]);
+
+    // Soporte para botones Atrás / Adelante del navegador
+    useEffect(() => {
+        const handlePopState = () => {
+            if (!services || services.length === 0) return;
+            const pathParts = window.location.pathname.split("/").filter(Boolean);
+            const servicesIdx = pathParts.indexOf("services");
+            const slugFromPath = servicesIdx !== -1 && pathParts[servicesIdx + 1] ? decodeURIComponent(pathParts[servicesIdx + 1]) : null;
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
+            const target = slugFromPath || urlParams.get("slug");
+
+            if (target) {
+                const foundIndex = services.findIndex((s) => s.slug === target);
+                if (foundIndex !== -1) {
+                    setSelectedServiceIndex(foundIndex);
+                    return;
+                }
+            }
+            setSelectedServiceIndex(0);
         };
 
-        const slug = getQueryParam("slug");
-        if (slug) {
-            const foundIndex = services.findIndex(
-                (service) =>
-                    service.slug === slug ||
-                    service.title.toLowerCase().replace(/[^a-z0-9]+/g, "-") ===
-                        slug
-            );
-            if (foundIndex !== -1) setActiveIndex(foundIndex);
-        }
+        window.addEventListener("popstate", handlePopState);
+        return () => window.removeEventListener("popstate", handlePopState);
     }, [services]);
+
+    // Función al seleccionar un servicio: actualiza el índice y la URL amigable
+    const handleSelectService = (index) => {
+        setSelectedServiceIndex(index);
+        setShowServicesMenu(false);
+        const selected = services[index];
+        if (selected?.slug) {
+            const newUrl = `/services/${selected.slug}`;
+            if (window.location.pathname !== newUrl) {
+                window.history.pushState({ slug: selected.slug }, "", newUrl);
+            }
+        }
+    };
 
     const { t } = useTranslation();
 
@@ -190,13 +257,15 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialit
                                     className="hidden lg:relative lg:block lg:bg-transparent space-y-2"
                                 >
                                     {services.map((service, index) => (
-                                        <motion.div
+                                        <motion.a
                                             key={index}
-                                            onClick={() =>
-                                                setActiveIndex(index)
-                                            }
-                                            className={`flex items-center justify-between p-3 lg:py-3 lg:px-[5%] rounded-lg cursor-pointer ${
-                                                index === activeIndex
+                                            href={`/services/${service.slug}`}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                handleSelectService(index);
+                                            }}
+                                            className={`flex items-center justify-between p-3 lg:py-3 lg:px-[5%] rounded-lg cursor-pointer no-underline text-inherit ${
+                                                index === selectedServiceIndex
                                                     ? "bg-gray-100"
                                                     : "hover:bg-gray-50"
                                             }`}
@@ -205,7 +274,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialit
                                         >
                                             <span
                                                 className={`lg:text-lg ${
-                                                    index === activeIndex
+                                                    index === selectedServiceIndex
                                                         ? "font-medium"
                                                         : ""
                                                 }`}
@@ -220,7 +289,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialit
                                                     loading="lazy"
                                                 />
                                             </div>
-                                        </motion.div>
+                                        </motion.a>
                                     ))}
                                 </motion.div>
                                 <AnimatePresence>
@@ -235,13 +304,15 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialit
                                             className=" lg:hidden lg:bg-transparent space-y-2"
                                         >
                                             {services.map((service, index) => (
-                                                <motion.div
+                                                <motion.a
                                                     key={index}
-                                                    onClick={() =>
-                                                        setActiveIndex(index)
-                                                    }
-                                                    className={`flex items-center justify-between p-3 lg:py-3 lg:px-[5%] rounded-lg cursor-pointer ${
-                                                        index === activeIndex
+                                                    href={`/services/${service.slug}`}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        handleSelectService(index);
+                                                    }}
+                                                    className={`flex items-center justify-between p-3 lg:py-3 lg:px-[5%] rounded-lg cursor-pointer no-underline text-inherit ${
+                                                        index === selectedServiceIndex
                                                             ? "bg-gray-100"
                                                             : "hover:bg-gray-50"
                                                     }`}
@@ -251,7 +322,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialit
                                                     <span
                                                         className={`lg:text-lg ${
                                                             index ===
-                                                            activeIndex
+                                                            selectedServiceIndex
                                                                 ? "font-medium"
                                                                 : ""
                                                         }`}
@@ -266,7 +337,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialit
                                                             loading="lazy"
                                                         />
                                                     </div>
-                                                </motion.div>
+                                                </motion.a>
                                             ))}
                                         </motion.div>
                                     )}
@@ -279,7 +350,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialit
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.4 }}
-                                key={activeIndex}
+                                key={selectedServiceIndex}
                             >
                                 <motion.h2
                                     className="text-5xl lg:mt-6 font-semibold mb-4 text-wrap"
@@ -288,7 +359,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialit
                                     transition={{ delay: 0.3 }}
                                 >
                                     <TextWithHighlight
-                                        text={services[activeIndex].title}
+                                        text={services[selectedServiceIndex]?.title}
                                         split={true}
                                     />
                                 </motion.h2>
@@ -300,7 +371,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialit
                                     variants={containerVariants}
                                 >
                                     {renderDescription(
-                                        services[activeIndex].description
+                                        services[selectedServiceIndex]?.description
                                     )}
                                 </motion.div>
 
@@ -311,7 +382,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialit
                                     initial="hidden"
                                     animate="visible"
                                 >
-                                    {services[activeIndex].characteristics.map(
+                                    {services[selectedServiceIndex]?.characteristics?.map(
                                         (characteristic, index) => (
                                             <motion.div
                                                 key={index}
@@ -378,7 +449,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialit
 
                                 {/* Service Images */}
                                 <DynamicGalleryServiceService
-                                    service={services[activeIndex]}
+                                    service={services[selectedServiceIndex]}
                                 />
                             </motion.div>
                         </div>
@@ -564,7 +635,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialit
                                         }}
                                         modules={[Navigation, Pagination]}
                                         onSlideChange={(swiper) =>
-                                            setActiveIndex(swiper.realIndex)
+                                            setActiveSpecialtyIndex(swiper.realIndex)
                                         }
                                     >
                                         {specialities.map(
@@ -611,24 +682,24 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage ,specialit
                                     >
                                         {specialities
                                             .slice(
-                                                Math.max(0, activeIndex - 1),
+                                                Math.max(0, activeSpecialtyIndex - 1),
                                                 Math.min(
                                                     specialities.length,
-                                                    activeIndex + 2
+                                                    activeSpecialtyIndex + 2
                                                 )
                                             )
                                             .map((_, indexOffset) => {
                                                 const index =
                                                     Math.max(
                                                         0,
-                                                        activeIndex - 1
+                                                        activeSpecialtyIndex - 1
                                                     ) + indexOffset;
                                                 return (
                                                     <motion.button
                                                         key={index}
                                                         className={`rounded-full transition-all duration-300 ${
-                                                            index ===
-                                                            activeIndex
+                                                             index ===
+                                                             activeSpecialtyIndex
                                                                 ? "bg-[#224483] w-[20px] h-[12px]"
                                                                 : "bg-[#22448366] w-[12px] h-[12px]"
                                                         }`}

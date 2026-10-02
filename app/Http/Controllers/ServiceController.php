@@ -23,15 +23,14 @@ class ServiceController extends BasicController
         ->where('status', true)
         ->where('lang_id', $langId)
         ->get();
+
+        $slug = $request->route('slug') ?? $request->query('slug');
+
         return [
-
-
             'landing' => $landing,
-
             'services' => $services,
-
-           'specialities' => $specialities,
-
+            'specialities' => $specialities,
+            'currentSlug' => $slug,
         ];
     }
 }
