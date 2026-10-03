@@ -342,7 +342,7 @@ const InstalacionesPage = ({
     return (
         <div className="font-poppins">
             <Header />
-            {facilities ? (
+            {facilities && facilities.length > 0 ? (
                 <div className="min-h-screen bg-white font-sans text-negro">
                     <motion.div
                         className="max-w-[82rem] mx-auto px-4 lg:px-[5%] py-8 lg:py-12"
