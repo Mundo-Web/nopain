@@ -13,7 +13,7 @@ import { useTranslation } from "../../hooks/useTranslation";
 
 const messagesRest = new MessagesRest();
 
-const PhoneInput = ({ onPhoneChange }) => {
+const PhoneInput = ({ onPhoneChange, t }) => {
     const [countries, setCountries] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState(null);
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -82,7 +82,10 @@ const PhoneInput = ({ onPhoneChange }) => {
 
     return (
         <div className="relative w-full">
-            <label className="block text-sm font-medium mb-1">Teléfono*</label>
+            <label className="block text-sm font-medium mb-1">   {t(
+                "public.form.phone",
+                "Teléfono"
+            )}*</label>
 
             <div className="flex border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500">
                 {/* Selector de país */}
@@ -99,9 +102,8 @@ const PhoneInput = ({ onPhoneChange }) => {
                             <span>{selectedCountry?.iso2}</span>
                         </div>
                         <ChevronDown
-                            className={`h-4 w-4 transition-transform ${
-                                showDropdown ? "rotate-180" : ""
-                            }`}
+                            className={`h-4 w-4 transition-transform ${showDropdown ? "rotate-180" : ""
+                                }`}
                         />
                     </button>
 
@@ -142,14 +144,14 @@ const PhoneInput = ({ onPhoneChange }) => {
             {/* Mostrar número completo */}
             {phoneNumber && selectedCountry && (
                 <p className="mt-1 text-sm text-gray-500">
-                    Número completo: +{selectedCountry.phoneCode} {phoneNumber}
+                    +{selectedCountry.phoneCode} {phoneNumber}
                 </p>
             )}
         </div>
     );
 };
 
-const ContactForm = ({}) => {
+const ContactForm = ({ }) => {
     const [formData, setFormData] = useState({
         phone: "",
     });
@@ -251,6 +253,7 @@ const ContactForm = ({}) => {
 
             <div>
                 <PhoneInput
+                    t={t}
                     onPhoneChange={(fullNumber) =>
                         setFormData({ ...formData, phone: fullNumber })
                     }
