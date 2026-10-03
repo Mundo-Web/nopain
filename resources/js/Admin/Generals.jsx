@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import Swal from "sweetalert2";
 
 // Asume que tienes un servicio para guardar los datos
 import BaseAdminto from "../Components/Adminto/Base";
@@ -66,6 +67,58 @@ const Generals = ({ generals }) => {
     });
 
     const [activeTab, setActiveTab] = useState("policies");
+    const [generatingSitemap, setGeneratingSitemap] = useState(false);
+
+    const handleGenerateSitemap = async () => {
+        try {
+            setGeneratingSitemap(true);
+            const res = await generalsRest.generateSitemap();
+            const isOk = res?.status === 200 || res?.status === true;
+            if (isOk) {
+                const payload = res?.data ?? res?.result ?? {};
+                const totalUrls = payload.total_urls ?? 0;
+                const servicesCount = payload.services_count ?? 0;
+                const postsCount = payload.posts_count ?? 0;
+                const generatedAt = payload.generated_at || new Date().toLocaleString();
+
+                Swal.fire({
+                    icon: "success",
+                    title: "¡Sitemap Generado!",
+                    html: `
+                        <div class="text-start">
+                            <p class="mb-2"><strong>Total URLs agregadas:</strong> ${totalUrls}</p>
+                            <p class="mb-2"><strong>Servicios con slug:</strong> ${servicesCount}</p>
+                            <p class="mb-2"><strong>Artículos de Blog:</strong> ${postsCount}</p>
+                            <p class="mb-3 text-muted small"><strong>Fecha:</strong> ${generatedAt}</p>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Ver Sitemap XML',
+                    cancelButtonText: 'Cerrar',
+                    confirmButtonColor: '#224483',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.open('/sitemap.xml', '_blank');
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: res?.message || "Ocurrió un error al generar el archivo sitemap.xml",
+                });
+            }
+        } catch (error) {
+            console.error("Error generando sitemap:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "No se pudo comunicar con el servidor para generar el sitemap.",
+            });
+        } finally {
+            setGeneratingSitemap(false);
+        }
+    };
 
     const handleInputChange = (e, index, field) => {
         const { value } = e.target;
@@ -543,6 +596,48 @@ const Generals = ({ generals }) => {
                                 );
                             })}
                         </SelectFormGroup>
+
+                        <div className="card mt-4 border border-info bg-light">
+                            <div className="card-body">
+                                <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                                    <div>
+                                        <h5 className="card-title mb-1 text-primary d-flex align-items-center gap-2">
+                                            <i className="fas fa-sitemap me-2"></i> Mapa del Sitio Web (Sitemap XML)
+                                        </h5>
+                                        <p className="card-text text-muted mb-0 small">
+                                            Genera y actualiza dinámicamente el archivo <code>public/sitemap.xml</code> incluyendo automáticamente todas las páginas principales, servicios con sus slugs y artículos del blog para Google y motores de búsqueda.
+                                        </p>
+                                    </div>
+                                    <div className="d-flex align-items-center gap-2 flex-wrap">
+                                        <a
+                                            href="/sitemap.xml"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="btn btn-outline-secondary btn-sm"
+                                        >
+                                            <i className="fas fa-external-link-alt me-1"></i> Ver actual
+                                        </a>
+                                        <button
+                                            type="button"
+                                            className="btn btn-success btn-sm d-flex align-items-center gap-1"
+                                            onClick={handleGenerateSitemap}
+                                            disabled={generatingSitemap}
+                                        >
+                                            {generatingSitemap ? (
+                                                <>
+                                                    <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                                    Generando...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <i className="fas fa-sync-alt me-1"></i> Generar Sitemap XML
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div

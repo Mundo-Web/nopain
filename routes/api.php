@@ -345,6 +345,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/translations/translate', [AdminTranslationController::class, 'translate']);
 
         Route::post('/generals', [AdminGeneralController::class, 'save']);
+        Route::post('/generals/generate-sitemap', [AdminGeneralController::class, 'generateSitemap']);
         Route::post('/generals/paginate', [AdminGeneralController::class, 'paginate']);
         Route::patch('/generals/status', [AdminGeneralController::class, 'status']);
         Route::patch('/generals/{field}', [AdminGeneralController::class, 'boolean']);
