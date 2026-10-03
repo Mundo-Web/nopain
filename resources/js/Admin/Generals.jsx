@@ -73,9 +73,8 @@ const Generals = ({ generals }) => {
         try {
             setGeneratingSitemap(true);
             const res = await generalsRest.generateSitemap();
-            const isOk = res?.status === 200 || res?.status === true;
-            if (isOk) {
-                const payload = res?.data ?? res?.result ?? {};
+            if (res?.status) {
+                const payload = res?.data?.data ?? res?.data ?? res?.result?.data ?? res?.result ?? {};
                 const totalUrls = payload.total_urls ?? 0;
                 const servicesCount = payload.services_count ?? 0;
                 const postsCount = payload.posts_count ?? 0;
