@@ -1,6 +1,7 @@
-const TextWithHighlight = ({ text, split = false, split_coma = false,split_dos_puntos=false }) => {
+const TextWithHighlight = ({ text, split = false, split_coma = false, split_dos_puntos = false }) => {
     // Función para procesar el texto con resaltados
     const renderHighlightedText = (textToRender) => {
+        if (!textToRender || typeof textToRender !== "string") return null;
         const parts = textToRender.split(/(\*[^*]+\*)/g); // separa todo lo entre *...*
 
         return parts.map((part, index) =>
@@ -13,6 +14,10 @@ const TextWithHighlight = ({ text, split = false, split_coma = false,split_dos_p
             )
         );
     };
+
+    if (!text || typeof text !== "string") {
+        return null;
+    }
 
     if (split) {
         const words = text.split(" ");

@@ -14,6 +14,21 @@ const CookieBanner = () => {
         }
     }, []);
 
+    useEffect(() => {
+        if (isModalOpen) {
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.documentElement.style.overflow = '';
+            document.body.style.overflow = '';
+        }
+
+        return () => {
+            document.documentElement.style.overflow = '';
+            document.body.style.overflow = '';
+        };
+    }, [isModalOpen]);
+
     const acceptCookies = () => {
         localStorage.setItem('cookiesAccepted', 'true');
         setIsVisible(false);
@@ -66,7 +81,12 @@ const CookieBanner = () => {
 
             {/* Modal de configuración de cookies */}
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black/60 z-[999999] flex items-center justify-center p-4 font-poppins backdrop-blur-sm">
+                <div 
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) setIsModalOpen(false);
+                    }}
+                    className="fixed inset-0 bg-black/60 z-[999999] flex items-center justify-center p-4 font-poppins backdrop-blur-sm"
+                >
                     <div className="bg-white rounded-2xl p-6 md:p-8 w-full max-w-xl shadow-2xl relative max-h-[90vh] overflow-y-auto">
                         <button 
                             onClick={() => setIsModalOpen(false)}

@@ -239,7 +239,17 @@ const Header = ({
             if (response.ok) {
                 await changeLanguage(langData); // ✅ Agrega await aquí
                 setSelectLanguage(langData);
-                window.location.reload(); // ⚠️ Opcional temporal para forzar actualización
+                // Si la URL actual contiene el slug de un servicio (/services/...), al cambiar de idioma
+                // redirigir a /services para que no quede el slug del idioma anterior
+                if (window.location.pathname.startsWith("/services")) {
+                    if (window.location.pathname === "/services") {
+                        window.location.reload();
+                    } else {
+                        window.location.href = "/services";
+                    }
+                } else {
+                    window.location.reload(); // ⚠️ Opcional temporal para forzar actualización
+                }
             } else {
                 console.log("Error de extracion:", await response.text());
             }

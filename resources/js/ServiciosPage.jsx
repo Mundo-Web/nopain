@@ -18,15 +18,14 @@ import "swiper/css/pagination";
 import { Navigation, Pagination } from "swiper/modules";
 
 const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage, specialities, currentSlug }) => {
-    const landingHero = landing?.find(
+    const landingHero = landing?.find?.(
         (item) => item.correlative === "page_services_hero"
     );
 
-    const landingSpecialities = landing.find(
+    const landingSpecialities = landing?.find?.(
         (item) => item.correlative === "page_services_specialties"
     );
 
-    console.log(specialities)
     const [selectedServiceIndex, setSelectedServiceIndex] = useState(() => {
         if (!services || services.length === 0) return 0;
         
@@ -43,6 +42,10 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage, specialit
         }
         return 0;
     });
+
+    const activeService = (services && services.length > 0)
+        ? (services[selectedServiceIndex] || services[0])
+        : null;
 
     const [activeSpecialtyIndex, setActiveSpecialtyIndex] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -142,6 +145,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage, specialit
         }
 
         // Si no hay slug en la URL o no coincide, poner el primero y reflejar en la URL
+        setSelectedServiceIndex(0);
         const first = services[0];
         if (first?.slug) {
             const defaultPath = `/services/${first.slug}`;
@@ -359,7 +363,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage, specialit
                                     transition={{ delay: 0.3 }}
                                 >
                                     <TextWithHighlight
-                                        text={services[selectedServiceIndex]?.title}
+                                        text={activeService?.title}
                                         split={true}
                                     />
                                 </motion.h2>
@@ -371,7 +375,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage, specialit
                                     variants={containerVariants}
                                 >
                                     {renderDescription(
-                                        services[selectedServiceIndex]?.description
+                                        activeService?.description
                                     )}
                                 </motion.div>
 
@@ -382,7 +386,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage, specialit
                                     initial="hidden"
                                     animate="visible"
                                 >
-                                    {services[selectedServiceIndex]?.characteristics?.map(
+                                    {activeService?.characteristics?.map(
                                         (characteristic, index) => (
                                             <motion.div
                                                 key={index}
@@ -449,7 +453,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage, specialit
 
                                 {/* Service Images */}
                                 <DynamicGalleryServiceService
-                                    service={services[selectedServiceIndex]}
+                                    service={activeService}
                                 />
                             </motion.div>
                         </div>
@@ -480,7 +484,11 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage, specialit
                                         >
                                             <TextWithHighlight
                                                 text={
-                                                    landingSpecialities?.title
+                                                    landingSpecialities?.title ||
+                                                    t(
+                                                        "public.specialties.title",
+                                                        "¿Qué *lesiones* tratamos?"
+                                                    )
                                                 }
                                             />
                                         </motion.h2>
@@ -498,16 +506,17 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage, specialit
                                         variants={containerVariants}
                                     >
                                         {(() => {
+                                            const items = specialities || [];
+                                            if (items.length === 0) return null;
                                             const middleIndex = Math.ceil(
-                                                specialities.length / 2
+                                                items.length / 2
                                             );
-                                            const firstHalf =
-                                                specialities.slice(
-                                                    0,
-                                                    middleIndex
-                                                );
+                                            const firstHalf = items.slice(
+                                                0,
+                                                middleIndex
+                                            );
                                             const secondHalf =
-                                                specialities.slice(middleIndex);
+                                                items.slice(middleIndex);
 
                                             return (
                                                 <>
@@ -638,7 +647,7 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage, specialit
                                             setActiveSpecialtyIndex(swiper.realIndex)
                                         }
                                     >
-                                        {specialities.map(
+                                        {(specialities || []).map(
                                             (speciality, index) => (
                                                 <SwiperSlide key={index}>
                                                     <motion.div className="rounded-2xl overflow-hidden shadow-lg h-[380px] lg:h-[650px] group">
@@ -680,11 +689,11 @@ const ServiciosPage = ({ landing, services, linkWhatsApp, randomImage, specialit
                                         className="w-[150px] mx-auto overflow-hidden flex justify-center gap-2 mt-10"
                                         variants={itemVariants}
                                     >
-                                        {specialities
+                                        {(specialities || [])
                                             .slice(
                                                 Math.max(0, activeSpecialtyIndex - 1),
                                                 Math.min(
-                                                    specialities.length,
+                                                    (specialities || []).length,
                                                     activeSpecialtyIndex + 2
                                                 )
                                             )
