@@ -1,1 +1,0 @@
-import{j as r}from"./FileViewer-CpM0iYLI.js";import"./index-B80Lgev0.js";import{L as e}from"./Filter-1mRNSgu6.js";const f=({children:s,footerLinks:o,session:t,socials:n,terms:i,showSlogan:a=!0,showFooter:d=!0,gradientStart:c="#c4b8d3",gradientEnd:m="#f1d7c1",menuGradientEnd:u="#dbc8c9"})=>r.jsx(e,{children:r.jsxs("section",{children:[" ",s]})});export{f as B};

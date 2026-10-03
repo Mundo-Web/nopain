@@ -15,7 +15,7 @@ const Base = ({
 }) => {
     return (
         <LanguageProvider>
-            <section> {children}</section>
+            <section className="w-full max-w-full overflow-x-hidden relative"> {children}</section>
         </LanguageProvider>
     );
 };

@@ -277,7 +277,7 @@ const Header = ({
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.8 }}
                         src={backgroundSrc}
-                        className={`absolute -z-10 inset-0 w-screen h-full object-cover ${backgroundPosition}`}
+                        className={`absolute -z-10 inset-0 w-full h-full object-cover ${backgroundPosition}`}
                         alt="Background"
                     />
                 )}
@@ -286,7 +286,7 @@ const Header = ({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.8 }}
-                        className={`absolute -z-10 inset-0 w-screen h-full object-cover ${backgroundPosition}`}
+                        className={`absolute -z-10 inset-0 w-full h-full object-cover ${backgroundPosition}`}
                         autoPlay
                         loop
                         muted
@@ -329,7 +329,7 @@ const Header = ({
                     }`}
                 >
                     <div
-                        className={`px-[5%] w-screen py-4 lg:py-0 lg:max-w-[82rem] 2xl:max-w-[92rem] mx-auto flex justify-between items-center text-[#242424] shadow-lg lg:shadow-none`}
+                        className={`px-[5%] w-full py-4 lg:py-0 lg:max-w-[82rem] 2xl:max-w-[92rem] mx-auto flex justify-between items-center text-[#242424] shadow-lg lg:shadow-none`}
                     >
                         <motion.div
                             variants={itemVariants}

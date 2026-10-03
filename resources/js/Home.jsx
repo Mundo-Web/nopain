@@ -142,7 +142,7 @@ const Home = ({
     /*ANIMACIONES */
 
     return (
-        <div>
+        <div className="w-full max-w-full overflow-x-hidden relative">
             <Header showSlogan={showSlogan}></Header>
             {landingHero && (
                 <div className="relative ">
@@ -347,9 +347,8 @@ const Home = ({
             )}
             {indicators && (
                 <ScrollAnimation>
-                    <div className=" h-auto w-full bg-[#F8F8F8] mt-[36px] lg:mt-0">
-                        {" "}
-                        <div className="lg:max-w-[82rem] mx-auto lg:px-[5%]">
+                    <div className="h-auto w-full bg-[#F8F8F8] mt-[36px] lg:mt-0 overflow-hidden relative">
+                        <div className="lg:max-w-[82rem] mx-auto lg:px-[5%] overflow-hidden">
                             <Swiper
                                 slidesPerView={3}
                                 spaceBetween={30}

@@ -14,7 +14,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 export default function TestimonioSection({ testimonies }) {
     const [activeIndex, setActiveIndex] = useState(0);
     return (
-        <div className="mt-0 font-poppins">
+        <div className="mt-0 font-poppins w-full max-w-full overflow-x-clip relative">
             <div className="max-w-md mx-auto px-4 py-4 lg:max-w-3xl lg:mt-4 relative">
                 <Swiper
                     navigation={{

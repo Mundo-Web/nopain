@@ -30,9 +30,9 @@ export const ScrollAnimation = ({
         <motion.div
             initial="offscreen"
             whileInView="onscreen"
-            viewport={{ once: !repeat, amount: 0.3 }} // 30% del elemento debe ser visible
+            viewport={{ once: !repeat, amount: 0.2 }} // 20% del elemento debe ser visible
             variants={scrollVariants}
-            className={className}
+            className={`w-full max-w-full overflow-x-clip ${className}`}
         >
             {children}
         </motion.div>

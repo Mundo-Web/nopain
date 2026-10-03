@@ -67,11 +67,10 @@ const NavBar = ({ session = {}, title = "Pagina", languagesSystem }) => {
                                 >
                                     <img
                                         src={`/api/lang/media/${language.image}`}
-                                        className={`${
-                                            selectLanguage.id === language.id
+                                        className={`${selectLanguage.id === language.id
                                                 ? "border border-2 border-primary"
                                                 : ""
-                                        }`}
+                                            }`}
                                         style={{
                                             width: "40px",
 
@@ -114,9 +113,8 @@ const NavBar = ({ session = {}, title = "Pagina", languagesSystem }) => {
                         aria-expanded="false"
                     >
                         <img
-                            src={`/api/admin/profile/thumbnail/${
-                                session.relative_id
-                            }?v=${crypto.randomUUID()}`}
+                            src={`/api/admin/profile/thumbnail/${session.relative_id
+                                }?v=${crypto.randomUUID()}`}
                             alt="user-image"
                             className="rounded-circle"
                             style={{
@@ -190,7 +188,7 @@ const NavBar = ({ session = {}, title = "Pagina", languagesSystem }) => {
                     background: "#224483 ",
                 }}
             >
-                <a href="/home" className="logo logo-light text-center">
+                <a href="/" className="logo logo-light text-center">
                     <span className="logo-sm">
                         <img src="/assets/img/favicon.png" alt="" height="22" />
                     </span>
@@ -202,7 +200,7 @@ const NavBar = ({ session = {}, title = "Pagina", languagesSystem }) => {
                         />
                     </span>
                 </a>
-                <a href="/home" className="logo logo-dark text-center">
+                <a href="/" className="logo logo-dark text-center">
                     <span className="logo-sm">
                         <img src="/assets/img/favicon.png" alt="" height="22" />
                     </span>

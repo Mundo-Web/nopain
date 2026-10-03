@@ -122,6 +122,10 @@ $component = Route::currentRouteName();
     <link rel="stylesheet" href="/assets/fonts/aspekta/font-face.css" />
 </head>
 <style>
+    html, body {
+        overflow-x: hidden;
+        max-width: 100%;
+    }
     body {
         /*background-image: url('/assets/img/maqueta/Blog.png');*/
         width: 100%;
@@ -134,7 +138,7 @@ $component = Route::currentRouteName();
     }
 </style>
 
-<body class="font-poppins">
+<body class="font-poppins overflow-x-hidden">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQBC4B69"
             height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
