@@ -10,6 +10,7 @@ import MessagesRest from "../../Actions/MessagesRest";
 import Swal from "sweetalert2";
 import { data } from "autoprefixer";
 import { useTranslation } from "../../hooks/useTranslation";
+import TextWithHighlight from "../../Utils/TextWithHighlight";
 
 const messagesRest = new MessagesRest();
 
@@ -286,10 +287,13 @@ const ContactForm = ({ }) => {
                 </div>
                 <div className="ml-3 text-sm">
                     <label htmlFor="privacidad" className="">
-                        {t(
-                            "public.form.privacy",
-                            "Usted acepta nuestra amigable política de privacidad."
-                        )}
+                        <TextWithHighlight
+                            text={t(
+                                "public.form.privacy",
+                                "Usted acepta nuestra amigable *política de privacidad*."
+                            )}
+                            link="/policies/privacy_policy"
+                        />
                     </label>
                 </div>
             </div>
