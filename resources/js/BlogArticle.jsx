@@ -175,9 +175,9 @@ const BlogArticle = ({ article, posts, landing }) => {
                     <motion.div
                         variants={fadeInUp}
                         transition={{ delay: 0.4 }}
-                        className="prose max-w-none ql-editor"
+                        className="ql-snow"
                     >
-                        <HtmlContent html={article.description} />
+                        <HtmlContent className="ql-editor px-0" html={article.description} />
                     </motion.div>
 
                     <motion.div

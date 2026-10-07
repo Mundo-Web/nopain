@@ -42,8 +42,8 @@ const Policies = ({ policy, ...props }) => {
             <Header showSlogan={false} />
             <div className="px-[5%] max-w-4xl mx-auto py-16 min-h-[60vh] flex-grow mt-20">
                 <h1 className="text-3xl font-bold mb-8 text-[#224483]">{policyNames[policy] || policy}</h1>
-                <div className="prose max-w-none text-gray-700">
-                    <HtmlContent className="ql-editor" html={content} />
+                <div className="ql-snow">
+                    <HtmlContent className="ql-editor text-gray-700 px-0 border-0" html={content} />
                 </div>
             </div>
             <Footer />

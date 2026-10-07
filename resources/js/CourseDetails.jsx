@@ -65,10 +65,10 @@ const CourseDetails = ({ course }) => {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="prose max-w-none ql-editor"
+          className="ql-snow"
         >
           <h1 className="my-[5%] text-xl font-bold">Descripción</h1>
-          <HtmlContent html={course.description} />
+          <HtmlContent className="ql-editor px-0" html={course.description} />
           <div
             className="p-6 text-sm rounded-lg bg-[color:var(--My-Sin-50,#FFFAEB)] text-[color:var(--Woodsmoke-800,#2E405E)] my-[5%]"
           >
